@@ -64,26 +64,110 @@ function orderAlphabetically(array) {
 }
 
 // Exercise 5: Order by year, ascending
-function orderByYear() {
-
+//En esta ocasión, tendrás que implementar una función que recibiendo un array de películas, devuelve un array de películas ordenadas por año.
+//Como podrás observar, existen muchas películas que coinciden en un mismo año. Para ordenar estas películas que tienen el mismo año, debe realizarse por orden alfabético del título.
+function orderByYear(array) {
+  // Crear una copia del array para no modificar el original
+  const sortedMovies = [...array];
+  
+  // Ordenar por año y, en caso de empate, por título
+  return sortedMovies.sort((a, b) => {
+    // Primero comparar por año
+    if (a.year !== b.year) {
+      return a.year - b.year;
+    }
+    // Si los años son iguales, ordenar por título
+    return a.title.localeCompare(b.title);
+  });
 }
 
 // Exercise 6: Calculate the average of the movies in a category
-function moviesAverageByCategory() {
+//Lo estás haciendo muy bien, ¡ya has creado una aplicación web con muchas herramientas que podrán ayudar a los usuarios/as!
+//En este apartado, es necesario dar la posibilidad a los usuarios de pedir la nota media de las películas de un determinado género.
+//El primer paso será crear el test unitario para testear esa funcionalidad. Recuerda que los tests unitarios tendrán que añadirse al archivo "tests/films.spec.js".
+//Luego tendrás que crear la función que reciba una categoría de película, y calcule la media de nota de esa categoría (sobre el array de todas las películas).
 
+function moviesAverageByCategory(array, category) {
+  // Filtrar películas que contienen la categoría en su array de géneros
+  const moviesInCategory = array.filter(movie => movie.genre.includes(category));
+  
+  // Si no hay películas en la categoría, retornar 0
+  if (moviesInCategory.length === 0) return 0;
+  
+  // Calcular la suma de las puntuaciones
+  const totalScore = moviesInCategory.reduce((sum, movie) => sum + movie.score, 0);
+  
+  // Calcular el promedio y redondear a 2 decimales
+  const average = totalScore / moviesInCategory.length;
+  return Number(average.toFixed(2));
 }
 
 // Exercise 7: Modify the duration of movies to minutes
-function hoursToMinutes() {
+//Como habrás podido observar, la duración de las películas del array viene en horas y minutos.
+//Esto es un problema para compararlas fácilmente, por lo que tendrás que modificar ese formato de duración.
+//Tienes que crear una función donde recibiendo un array de películas, ¡devuelve un array con estas películas pero con la duración en minutos!
+//Por ejemplo:
+/*
+{
+title: 'Pulp Fiction',
+year: 1994,
+director: 'Quentin Tarantino',
+duration: '2h 34min',
+genre: ['Crime', 'Drama'],
+score: 8.9
+},
+Se transformaría en:
 
+{
+title: 'Pulp Fiction',
+year: 1994,
+director: 'Quentin Tarantino',
+duration: '154',
+genre: ['Crime', 'Drama'],
+score: 8.9
+},
+*/
+
+function hoursToMinutes(array) {
+  // creamos una copia del array 
+  return array.map(movie => {
+    // la copia creada completa con todos los campos
+    const movieCopy = { ...movie };
+    
+    // Extraer horas y minutos usando expresiones regulares
+    const hoursMatch = movie.duration.match(/(\d+)h/);
+    const minutesMatch = movie.duration.match(/(\d+)min/);
+    
+    // Convertir a números, si no hay match usar 0
+    const hours = hoursMatch ? parseInt(hoursMatch[1]) : 0;
+    const minutes = minutesMatch ? parseInt(minutesMatch[1]) : 0;
+    
+    // Calcular el tiempo  total en minutos
+    movieCopy.duration = hours * 60 + minutes;
+    
+    return movieCopy;
+  });
 }
 
 // Exercise 8: Get the best film of a year
-function bestFilmOfYear() {
+//Ya estás llegando al final, ¡sólo hace falta implementar una última funcionalidad!
+//Los usuarios/as necesitan saber qué película es la mejor de cada año. Para llevar a cabo esta funcionalidad, tendrás que crear una función que acepte el año, y devuelva la mejor película de ese año.
+
+function bestFilmOfYear(array, year) {
+  // Filtrar películas del año que se quiere
+  const moviesOfYear = array.filter(movie => movie.year === year);
   
+  // Si no hay películas de ese año, retornar array vacío
+  if (moviesOfYear.length === 0) return [];
+  
+  // Encontrar la película con la puntuación más alta
+  const bestMovie = moviesOfYear.reduce((best, current) => {
+    return current.score > best.score ? current : best;
+  });
+  
+  // Retornar un array con la mejor película delaño elegido 
+  return [bestMovie];
 }
-
-
 
 // The following is required to make unit tests work.
 /* Environment setup. Do not modify the below code. */

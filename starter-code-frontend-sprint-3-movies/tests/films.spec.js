@@ -291,10 +291,54 @@ describe('Function "orderByYear"', () => {
 });
 
 // Exercise 6
-// YOUR CODE HERE. Test moviesAverageByCategory()
 describe('Function "moviesAverageByCategory"', () => {
-  it('ADD YOUR CODE IN films.spec.js file', () => {
-    expect(typeof hoursToMinutes).toBe('coffee');
+  it('should be declared', () => {
+    expect(typeof moviesAverageByCategory).toBe('function');
+  });
+
+  it('should return a number', () => {
+    expect(typeof moviesAverageByCategory([], 'Drama')).toBe('number');
+  });
+
+  it('should return 0 if there are no movies in the category', () => {
+    const movies = [
+      { genre: ['Action'], score: 8.5 },
+      { genre: ['Comedy'], score: 7.8 }
+    ];
+    expect(moviesAverageByCategory(movies, 'Drama')).toBe(0);
+  });
+
+  it('should return the correct average for a category with one movie', () => {
+    const movies = [
+      { genre: ['Drama'], score: 8.5 }
+    ];
+    expect(moviesAverageByCategory(movies, 'Drama')).toBe(8.5);
+  });
+
+  it('should return the correct average for a category with multiple movies', () => {
+    const movies = [
+      { genre: ['Drama'], score: 8.5 },
+      { genre: ['Drama'], score: 9.0 },
+      { genre: ['Drama'], score: 8.0 }
+    ];
+    expect(moviesAverageByCategory(movies, 'Drama')).toBe(8.5);
+  });
+
+  it('should handle movies with multiple genres', () => {
+    const movies = [
+      { genre: ['Drama', 'Action'], score: 8.5 },
+      { genre: ['Drama', 'Comedy'], score: 9.0 },
+      { genre: ['Action'], score: 7.0 }
+    ];
+    expect(moviesAverageByCategory(movies, 'Drama')).toBe(8.75);
+  });
+
+  it('should round the average to 2 decimal places', () => {
+    const movies = [
+      { genre: ['Drama'], score: 8.333 },
+      { genre: ['Drama'], score: 9.666 }
+    ];
+    expect(moviesAverageByCategory(movies, 'Drama')).toBe(9.0);
   });
 });
 
